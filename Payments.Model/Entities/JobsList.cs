@@ -17,8 +17,8 @@ namespace Payments.Model.Entities
         public virtual JobsTable Job { get; set; }
         public bool PayerConformation { get; set; }
         public bool ReciverConformation { get; set; }
-        /*[InverseProperty("JobList")]
-        [System.Text.Json.Serialization.JsonIgnore]*/
-        public virtual ICollection<FinalBill> FinalBill { get; set; }
+        ///*[InverseProperty("JobList")]
+        //[System.Text.Json.Serialization.JsonIgnore]*/
+        //public virtual ICollection<FinalBill> FinalBill { get; set; }
     }
 }

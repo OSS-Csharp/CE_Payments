@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿    using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Payments.Domain.Repository.Interfaces;
 using Payments.Model.Entities;
@@ -12,22 +12,22 @@ namespace Payments.Api.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class StatusPaymentSolutionController : Controller
+    public class PaymentInformationController : Controller
     {
 
-        private readonly IStatusPaymentSolutionRepository _statusPaymentSolutionRepository;
+        private readonly IPaymentInformationRepository _PaymentInformationRepository;
 
-        public StatusPaymentSolutionController(IStatusPaymentSolutionRepository statusRepository)
+        public PaymentInformationController(IPaymentInformationRepository receiverlRepository)
         {
-            this._statusPaymentSolutionRepository = statusRepository;
+            this._PaymentInformationRepository = receiverlRepository;
         }
       
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<StatusPaymentSolution>>> GetStatuses()
+        public async Task<ActionResult<IEnumerable<PaymentInformation>>> GetPaymentInformations()
         {
             try
             {
-                return (await _statusPaymentSolutionRepository.GetStatuses()).ToList(); 
+                return (await _PaymentInformationRepository.GetPaymentInformations()).ToList();
             }
             catch (Exception)
             {
@@ -37,11 +37,11 @@ namespace Payments.Api.Controllers
         }
         [HttpGet]
         [Route("{id:int}")]
-        public async Task<ActionResult<StatusPaymentSolution>> GetStatus(int id)
+        public async Task<ActionResult<PaymentInformation>> GetPaymentInformation(int id)
         {
             try
             {
-                return (await _statusPaymentSolutionRepository.GetStatus(id));
+                return (await _PaymentInformationRepository.GetPaymentInformation(id));
             }
             catch (Exception)
             {
@@ -50,18 +50,19 @@ namespace Payments.Api.Controllers
             }
         }
         [HttpPost]
-        [Route("{id:int},{status}")]
-        public async Task<ActionResult<StatusPaymentSolution>> UpdateStatusPaymentSolution(int id, StatusPaymentSolution status)
+        [Route("{status}")]
+        public async Task<ActionResult<PaymentInformation>> UpdatePaymentInformation( PaymentInformation status)
         {
             try
             {
                 if (status == null)
                     return BadRequest();
 
-                var userToUpdate = await _statusPaymentSolutionRepository.GetStatus(id);
+                var userToUpdate = await _PaymentInformationRepository.GetPaymentInformation(status.IdPaymentInformation);
                 if (userToUpdate == null)
-                    return NotFound($"No user with Id= {id}");
-                return await _statusPaymentSolutionRepository.UpdateStatus(status);
+                    return NotFound($"No user with Id= {status.IdPaymentInformation}");
+               
+                return await _PaymentInformationRepository.UpdatePaymentInformation(status);
             }
             catch
             {
@@ -71,15 +72,15 @@ namespace Payments.Api.Controllers
         }
         [HttpPost]
         [Route("{status}")]
-        public async Task<ActionResult<StatusPaymentSolution>> AddStatus(StatusPaymentSolution status)
+        public async Task<ActionResult<PaymentInformation>> AddPaymentInformation(PaymentInformation status)
         {
             try
             {
                 if (status == null)
                     return BadRequest();
 
-                var createUser = await _statusPaymentSolutionRepository.AddStatus(status);
-                return CreatedAtAction(nameof(GetStatus), new { id = createUser.Id }, createUser);
+                var createUser = await _PaymentInformationRepository.AddPaymentInformation(status);
+                return CreatedAtAction(nameof(GetPaymentInformation), new { id = createUser.IdPaymentInformation }, createUser);
             }
             catch
             {
@@ -90,22 +91,22 @@ namespace Payments.Api.Controllers
         }
         [HttpDelete]
         [Route("{id:int}")]
-        public async Task<ActionResult<StatusPaymentSolution>> DeleteUserModel(int id)
+        public async Task<ActionResult<PaymentInformation>> DeletePaymentInformation(int id)
         {
             try
             {
-                var userToDelete = await _statusPaymentSolutionRepository.GetStatus(id);
+                var userToDelete = await _PaymentInformationRepository.GetPaymentInformation(id);
 
                 if (userToDelete == null)
                 {
                     return NotFound($"User with Id = {id} not found");
                 }
-                return await _statusPaymentSolutionRepository.DeleteStatus(id);
+                return await _PaymentInformationRepository.DeletePaymentInformation(id);
             }
             catch
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                "Error creating new employee record");
+                 "Error creating new employee record");
             }
         }
     }

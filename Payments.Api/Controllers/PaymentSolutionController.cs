@@ -1,34 +1,33 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿    using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Payments.Domain.Repository;
 using Payments.Domain.Repository.Interfaces;
 using Payments.Model.Entities;
+using Payments.Model.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Payments.Api.Controllers
-{               
+{
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class FinalBillsController : Controller
-    {   
+    public class PaymentSolutionController : Controller
+    {
 
-        private readonly IFinallBillRepository _finalBillRepository;
+        private readonly IPaymentSolutionRepository _PaymentSolutionRepository;
 
-        public FinalBillsController(IFinallBillRepository _finalBillRepository)
+        public PaymentSolutionController(IPaymentSolutionRepository receiverlRepository)
         {
-            this._finalBillRepository = _finalBillRepository;
+            this._PaymentSolutionRepository = receiverlRepository;
         }
+      
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<FinalBill>>> GetFinalBills() 
+        public async Task<ActionResult<IEnumerable<PaymentSolution>>> GetPaymentSolutiones()
         {
             try
             {
-                
-
-                return (await _finalBillRepository.GetFinalBills()).ToList();
+                return (await _PaymentSolutionRepository.GetPaymentSolutions()).ToList();
             }
             catch (Exception)
             {
@@ -38,12 +37,11 @@ namespace Payments.Api.Controllers
         }
         [HttpGet]
         [Route("{id:int}")]
-        public async Task<ActionResult<FinalBill>> GetFinalBill(int id)
+        public async Task<ActionResult<PaymentSolution>> GetPaymentSolution(int id)
         {
             try
             {
-                var v = (await _finalBillRepository.GetFinalBill(id));
-                return v;
+                return (await _PaymentSolutionRepository.GetPaymentSolution(id));
             }
             catch (Exception)
             {
@@ -51,38 +49,38 @@ namespace Payments.Api.Controllers
                     "Error retrieving data from the database");
             }
         }
-        [HttpPut]
-        [Route("{id:int}")]
-        public async Task<ActionResult<FinalBill>> UpdateFinalBill(int id, FinalBill finalBill)
+        [HttpPost]
+        [Route("{status}")]
+        public async Task<ActionResult<PaymentSolution>> UpdatePaymentSolution( PaymentSolution status)
         {
             try
             {
-                if (finalBill == null)
+                if (status == null)
                     return BadRequest();
 
-                var userToUpdate = await _finalBillRepository.GetFinalBill(id);
+                var userToUpdate = await _PaymentSolutionRepository.GetPaymentSolution(status.IdPaymentSolution);
                 if (userToUpdate == null)
-                    return NotFound($"No bill with Id= {id}");
-                return await _finalBillRepository.UpdateFinalBill(finalBill);
+                    return NotFound($"No user with Id= {status.IdPaymentSolution}");
+               
+                return await _PaymentSolutionRepository.UpdatePaymentSolution(status);
             }
             catch
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
                 "Error updating user");
             }
-
         }
         [HttpPost]
-        [Route("{id:int}")]
-        public async Task<ActionResult<FinalBill>> AddFinalBill(FinalBill payermodel)
+        [Route("{status}")]
+        public async Task<ActionResult<PaymentSolution>> AddPaymentSolution(PaymentSolution status)
         {
             try
             {
-                if (payermodel == null)
+                if (status == null)
                     return BadRequest();
 
-                var createUser = await _finalBillRepository.AddFinalBill(payermodel);
-                return CreatedAtAction(nameof(GetFinalBill), new { id = createUser.IdFinalBill }, createUser);
+                var createUser = await _PaymentSolutionRepository.AddPaymentSolution(status);
+                return CreatedAtAction(nameof(GetPaymentSolution), new { id = createUser.IdPaymentSolution }, createUser);
             }
             catch
             {
@@ -93,25 +91,23 @@ namespace Payments.Api.Controllers
         }
         [HttpDelete]
         [Route("{id:int}")]
-        public async Task<ActionResult<FinalBill>> DeleteFinalBill(int id)
+        public async Task<ActionResult<PaymentSolution>> DeletePaymentSolution(int id)
         {
             try
             {
-
-                var userToDelete = await _finalBillRepository.GetFinalBill(id);
+                var userToDelete = await _PaymentSolutionRepository.GetPaymentSolution(id);
 
                 if (userToDelete == null)
                 {
                     return NotFound($"User with Id = {id} not found");
                 }
-                return await _finalBillRepository.DeleteFinalBill(id);
+                return await _PaymentSolutionRepository.DeletePaymentSolution(id);
             }
             catch
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                "Error creating new employee record");
+                 "Error creating new employee record");
             }
-
         }
     }
 }

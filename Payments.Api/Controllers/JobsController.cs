@@ -57,20 +57,20 @@ namespace Payments.Api.Controllers
             }
         }
 
-        public async Task<ActionResult> CreateJob(JobsTable Job)
-        {
-            try
-            {
-                if (Job == null)
-                    return BadRequest();
-                var createJob = await _jobsRepository.CreateJob(Job);
-                return CreatedAtAction(nameof(ReadJobByIdAsync), new { Id = createJob.JobID }, createJob);
-            }
-            catch
-            {
+        //public async Task<ActionResult> CreateJob(JobsTable Job)
+        //{
+        //    try
+        //    {
+        //        if (Job == null)
+        //            return BadRequest();
+        //        var createJob = await _jobsRepository.CreateJob(Job);
+        //        return CreatedAtAction(nameof(ReadJobByIdAsync), new { Id = createJob.JobID }, createJob);
+        //    }
+        //    catch
+        //    {
 
-            }
-        }
+        //    }
+        //}
         public IActionResult Index()
         {
             return View();

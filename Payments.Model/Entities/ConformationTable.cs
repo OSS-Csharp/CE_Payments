@@ -18,6 +18,6 @@ namespace Payments.Model.Entities
         public decimal PriceCheck { get; set; }
         /*[InverseProperty("Conformation")]
         [System.Text.Json.Serialization.JsonIgnore]*/
-        public virtual ICollection<FinalBill> FinalBill { get; set; }
+        //public virtual ICollection<FinalBill> FinalBill { get; set; }
     }
 }

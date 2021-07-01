@@ -50,42 +50,42 @@ namespace Payments.Api.Controllers
             }
         }
         [HttpPost]
-        [Route("{status}")]
-        public async Task<ActionResult<PaymentInformation>> UpdatePaymentInformation( PaymentInformation status)
+        [Route("{info}")]
+        public async Task<ActionResult<PaymentInformation>> UpdatePaymentInformation( PaymentInformation info)
         {
             try
             {
-                if (status == null)
+                if (info == null)
                     return BadRequest();
 
-                var userToUpdate = await _PaymentInformationRepository.GetPaymentInformation(status.IdPaymentInformation);
+                var userToUpdate = await _PaymentInformationRepository.GetPaymentInformation(info.IdPaymentInformation);
                 if (userToUpdate == null)
-                    return NotFound($"No user with Id= {status.IdPaymentInformation}");
+                    return NotFound($"No user with Id= {info.IdPaymentInformation}");
                
-                return await _PaymentInformationRepository.UpdatePaymentInformation(status);
+                return await _PaymentInformationRepository.UpdatePaymentInformation(info);
             }
             catch
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                "Error updating user");
+                "Error updating infrotab");
             }
         }
         [HttpPost]
-        [Route("{status}")]
-        public async Task<ActionResult<PaymentInformation>> AddPaymentInformation(PaymentInformation status)
+        [Route("{info}")]
+        public async Task<ActionResult<PaymentInformation>> AddPaymentInformation(PaymentInformation info)
         {
             try
             {
-                if (status == null)
+                if (info == null)
                     return BadRequest();
 
-                var createUser = await _PaymentInformationRepository.AddPaymentInformation(status);
-                return CreatedAtAction(nameof(GetPaymentInformation), new { id = createUser.IdPaymentInformation }, createUser);
+                var createinfo = await _PaymentInformationRepository.AddPaymentInformation(info);
+                return CreatedAtAction(nameof(GetPaymentInformation), new { id = createinfo.IdPaymentInformation }, createinfo);
             }
             catch
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                "Error creating new employee record");
+                "Error creating new info record");
             }
 
         }
@@ -106,7 +106,7 @@ namespace Payments.Api.Controllers
             catch
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                 "Error creating new employee record");
+                 "Error deleteing info record");
             }
         }
     }

@@ -10,14 +10,14 @@ using System.Threading.Tasks;
 
 namespace Payments.Web.Pages.Administration
 {
-    public class EditStatusFinalBillBase : ComponentBase
+    public class EditStatusPaymentSolutionBase : ComponentBase
     {
         [Inject]
-        public IStatusFinalBillService StatusFinalBillService { get; set; }
+        public IStatusPaymentSolutionService StatusPaymentSolutionService { get; set; }
 
         public StatusesModel EditStatusModel { get; set; } = new StatusesModel();
 
-        private StatusFinalBill StatusFinalBill { get; set;  }
+        private StatusPaymentSolution StatusPaymentSolution { get; set;  }
 
 
         [Parameter]
@@ -37,42 +37,39 @@ namespace Payments.Web.Pages.Administration
             int.TryParse(Id, out int idint);
             if(idint !=  0)
             {
-                StatusFinalBill = await StatusFinalBillService.GetStatus(int.Parse(Id));
+                StatusPaymentSolution = await StatusPaymentSolutionService.GetStatus(int.Parse(Id));
             }
             
-                Mapper.Map(StatusFinalBill, EditStatusModel);
+                Mapper.Map(StatusPaymentSolution, EditStatusModel);
         }
         protected async Task OnSubmit()
         {
-            if (StatusFinalBill == null)
-                StatusFinalBill = new StatusFinalBill();
+            if (StatusPaymentSolution == null)
+                StatusPaymentSolution = new StatusPaymentSolution();
 
-            var result = new StatusFinalBill();
-            Mapper.Map(EditStatusModel, StatusFinalBill);
+            var result = new StatusPaymentSolution();
+            Mapper.Map(EditStatusModel, StatusPaymentSolution);
             
-            if (StatusFinalBill.IdStatus != 0)
+            if (StatusPaymentSolution.Id != 0)
             {
-                 result = await StatusFinalBillService.UpdateStatus(StatusFinalBill);
+                 result = await StatusPaymentSolutionService.UpdateStatus(StatusPaymentSolution);
             }
             else
             {
-                result = await StatusFinalBillService.AddStatus(StatusFinalBill);
+                result = await StatusPaymentSolutionService.AddStatus(StatusPaymentSolution);
             }
                 NavigationManager.NavigateTo("/statuseslist");
 
         }
         protected async Task Delete_Click()
         {
-            await StatusFinalBillService.DeleteStatus(EditStatusModel.IdStatus);
-           
-
-            var a = await StatusFinalBillService.GetStatus(EditStatusModel.IdStatus);
+            await StatusPaymentSolutionService.DeleteStatus(EditStatusModel.IdStatus);
+            var a = await StatusPaymentSolutionService.GetStatus(EditStatusModel.IdStatus);
             if(a!=null)
             {
-                StatusFinalBill = a; 
+                StatusPaymentSolution = a; 
                 warning = true;
-                Mapper.Map(EditStatusModel, StatusFinalBill);
-               
+                Mapper.Map(EditStatusModel, StatusPaymentSolution);
             }
             else
             {

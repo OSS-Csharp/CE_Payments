@@ -26,5 +26,7 @@ namespace Payments.Model.Entities
         public string PenaltyPErcentage { get; set; }
 
         public bool IsActivated { get; set; }
+
+        public string FinalAmount { get; set; }
     }
 }

@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Payments.Model.Profiles;
+using Payments.Model.Models;
 
 namespace Payments.Web
 {
@@ -37,13 +38,17 @@ namespace Payments.Web
             services.AddAuthentication("Identity.Application")
                 .AddCookie();
             
-            services.AddAutoMapper(typeof(StatusesProfile));    
+            services.AddAutoMapper(typeof(StatusesProfile));
+
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddHttpClient<IFinalBillService, FinalBillService>(client =>
             {
                 client.BaseAddress = new Uri("https://localhost:44387/");
             });
+
+
+
             services.AddHttpClient<IStatusFinalBillService, StatusFinalBillService>(client =>
             {
                 client.BaseAddress = new Uri("https://localhost:44387/");
@@ -52,7 +57,34 @@ namespace Payments.Web
             {
                 client.BaseAddress = new Uri("https://localhost:44387/");
             });
+
+
+
             services.AddHttpClient<IContractService, ContractService>(client =>
+            {
+                client.BaseAddress = new Uri("https://localhost:44387/");
+            });
+
+            services.AddHttpClient<IPayersTableService, PayersTableService>(client =>
+            {
+                client.BaseAddress = new Uri("https://localhost:44387/");
+            });
+            services.AddHttpClient<IReceiversTableService, ReceiversTableService>(client =>
+            {
+                client.BaseAddress = new Uri("https://localhost:44387/");
+            });
+
+
+
+            services.AddHttpClient<IPaymentInformationService, PaymentInformationService>(client =>
+            {
+                client.BaseAddress = new Uri("https://localhost:44387/");
+            });
+            services.AddHttpClient<IPaymentScheduleService, PaymentScheduleService>(client =>
+            {
+                client.BaseAddress = new Uri("https://localhost:44387/");
+            });
+            services.AddHttpClient<IPaymentSolutionService, PaymentSolutionService>(client =>
             {
                 client.BaseAddress = new Uri("https://localhost:44387/");
             });

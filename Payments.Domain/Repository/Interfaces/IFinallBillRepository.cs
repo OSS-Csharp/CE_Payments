@@ -13,5 +13,12 @@ namespace Payments.Domain.Repository.Interfaces
         Task<FinalBill> AddFinalBill(FinalBill UserModel);
         Task<FinalBill> UpdateFinalBill(FinalBill UserModel);
         Task<FinalBill> DeleteFinalBill(int UserModelId);
+
+        Task<IEnumerable<FinalBill>> GetAllByPayer(int id);
+        Task<IEnumerable<FinalBill>> GetAllByReceiver(int id);
+
+        Task<FinalBill> GetFinalBillByPaymentSolution(int id);
+
+
     }
 }

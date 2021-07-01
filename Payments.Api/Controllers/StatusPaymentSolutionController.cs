@@ -66,7 +66,7 @@ namespace Payments.Api.Controllers
             catch
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                "Error updating user");
+                "Error updating status");
             }
         }
         [HttpPost]
@@ -84,7 +84,7 @@ namespace Payments.Api.Controllers
             catch
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                "Error creating new employee record");
+                "Error creating new status");
             }
 
         }
@@ -105,7 +105,7 @@ namespace Payments.Api.Controllers
             catch
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                "Error creating new employee record");
+                "Error deletingstatus");
             }
         }
     }

@@ -22,9 +22,9 @@ namespace Payments.Domain.Repository
         public async Task<IEnumerable<PaymentSchedule>> GetPaymentSchedules()
         {
             
-           // var a = appDbContext.PaymentScheduleTable.ToList();
+          
 
-            return await appDbContext.PaymentSchedules.ToListAsync();
+            return await appDbContext.PaymentSchedules.Include(e=> e.PaymentInformation).Include(e=>e.PaymentSolution).ToListAsync();
         }
         public async Task<PaymentSchedule> GetPaymentSchedule(int Id)
         {
@@ -41,7 +41,7 @@ namespace Payments.Domain.Repository
        
         public async Task<PaymentSchedule> UpdatePaymentSchedule(PaymentSchedule Solution)
         {
-            var result = await appDbContext.PaymentSchedules.FirstOrDefaultAsync(e => e.IdPaymentSchedule == Solution.IdPaymentSchedule);
+            var result = await appDbContext.PaymentSchedules.Include(e => e.PaymentInformation).Include(e => e.PaymentSolution).FirstOrDefaultAsync(e => e.IdPaymentSchedule == Solution.IdPaymentSchedule);
             if(result != null)
             {
                 //fill for update 
@@ -65,6 +65,23 @@ namespace Payments.Domain.Repository
             }
             return null;
 
+        }
+
+        public async Task<IEnumerable<PaymentSchedule>> GetPaymentSchedulesBySolutionId(int id)
+        {
+            return await appDbContext.PaymentSchedules.Include(p=>p.PaymentInformation).Where(p=>p.PaymentSolutionId == id).ToListAsync();
+        }
+
+        public async Task<PaymentSchedule> IsPaid(int Id)
+        {
+            var result = await appDbContext.PaymentSchedules.FirstOrDefaultAsync(e => e.IdPaymentSchedule == Id);
+            if (result != null)
+            { 
+                result.IsPaid = true;
+                await appDbContext.SaveChangesAsync();
+                return result;
+            }
+            return null;
         }
     }
 }

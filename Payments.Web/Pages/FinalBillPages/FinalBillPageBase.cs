@@ -18,11 +18,8 @@ namespace Payments.Web.Pages.FinalBillPages
         protected override async Task OnInitializedAsync()
         {
             FinalBills = (await FinalBillService.GetFinalBIlls()).ToList();
-
-            //FinalBills = null;
            
-           
-            bill = (await FinalBillService.GetFinalBill(1));
+            //bill = (await FinalBillService.GetFinalBill(1));
 
         }
     }

@@ -14,6 +14,11 @@ namespace Payments.Model.Profiles
             CreateMap<StatusFinalBill, StatusesModel>();
             CreateMap<StatusesModel, StatusFinalBill>();
 
+            CreateMap<StatusPaymentSolution, StatusesModel>();
+            CreateMap<StatusesModel,StatusPaymentSolution>();
+
+            CreateMap<PaymentSchedule, CustomPaymentsModel>();
+            CreateMap<CustomPaymentsModel, PaymentSchedule>();
         }
     }
 }

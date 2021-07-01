@@ -1,7 +1,7 @@
 ﻿@page "/statuseslist"
 @inherits StatusesListPageBase
 
-
+@attribute [Authorize(Roles = "admin")]
 <h3>StatusesListPage</h3>
 <div class="card">
     @if (statusFinalBills != null)
@@ -32,37 +32,40 @@
 
         @foreach (var s in statusFinalBills)
         {
-<div class="row">
-    <div class="col-1 card">
-        <label class="col-form-label">
-            @s.IdStatus
-        </label>
-    </div>
-    <div class="col-3 card">
-        <label class="col-form-label">
-            @s.ShortName
-        </label>
-    </div>
-    <div class="col-5 card">
-        <label class="col-form-label">
-            @s.Description
-        </label>
-    </div>
-    <div class="col-2 card">
-        <label class="col-form-label">
-            @s.Code
-        </label>
-    </div>
-    <label>
-        <NavLink class="nav-link card" href="@($"editstatusfinalbill/{s.IdStatus}")" Match="NavLinkMatch.All">
-            <span class="oi" aria-hidden="true"></span> Edit
-        </NavLink>
-    </label>
-</div>
+            <div class="row">
+                <div class="col-1 card">
+                    <label class="col-form-label">
+                        @s.IdStatus
+                    </label>
+                </div>
+                <div class="col-3 card">
+                    <label class="col-form-label">
+                        @s.ShortName
+                    </label>
+                </div>
+                <div class="col-5 card">
+                    <label class="col-form-label">
+                        @s.Description
+                    </label>
+                </div>
+                <div class="col-2 card">
+                    <label class="col-form-label">
+                        @s.Code
+                    </label>
+                </div>
+                <label>
+                    <NavLink class="nav-link card" href="@($"editstatusfinalbill/{s.IdStatus}")" Match="NavLinkMatch.All">
+                        <span class="oi" aria-hidden="true"></span> Edit
+                    </NavLink>
+                </label>
+            </div>
 
         }
     }
 </div>
+<NavLink class="nav-link card" href="@($"editstatusfinalbill")" Match="NavLinkMatch.All">
+    <span class="oi" aria-hidden="true"></span> Add New Status for FinalBill
+</NavLink>
 <div calss="card">
 
     @if (statusPaymentSolutions != null)
@@ -116,7 +119,7 @@
                 </div>
                 <div class="col-1 card">
                     <label>
-                        <NavLink class="nav-link" href="@($"editstatusfinalbill/{s.Id}")" Match="NavLinkMatch.All">
+                        <NavLink class="nav-link" href="@($"editstatuspaymentsolution/{s.Id}")" Match="NavLinkMatch.All">
                             <span class="oi" aria-hidden="true"></span> Edit
                         </NavLink>
                     </label>
@@ -126,3 +129,6 @@
         }
     }
 </div>
+<NavLink class="nav-link card" href="@($"editstatuspaymentsolution")" Match="NavLinkMatch.All">
+    <span class="oi" aria-hidden="true"></span> Add New Status for FinalBill
+</NavLink>

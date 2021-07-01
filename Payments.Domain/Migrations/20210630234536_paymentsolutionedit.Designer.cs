@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Payments.Domain;
 
 namespace Payments.Domain.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210630234536_paymentsolutionedit")]
+    partial class paymentsolutionedit
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -63,7 +65,7 @@ namespace Payments.Domain.Migrations
                     b.HasData(
                         new
                         {
-                            IdContract = 5,
+                            IdContract = 1,
                             EndDate = new DateTime(2021, 6, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FinalAmount = "1200",
                             IntrestPercentage = "5.0",
@@ -74,48 +76,6 @@ namespace Payments.Domain.Migrations
                             ReciversName = "BobbyFischer@ce.com",
                             StartDate = new DateTime(2021, 6, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             TermsOfPayments = "OnePayment"
-                        },
-                        new
-                        {
-                            IdContract = 2,
-                            EndDate = new DateTime(2021, 6, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FinalAmount = "12000",
-                            IntrestPercentage = "5.0",
-                            IsActivated = false,
-                            NumberOfPayments = 4,
-                            PayersName = "JhonDee@ce.com",
-                            PenaltyPErcentage = "7.5",
-                            ReciversName = "JoseCapablanka@ce.com",
-                            StartDate = new DateTime(2021, 6, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            TermsOfPayments = "PartialPyments"
-                        },
-                        new
-                        {
-                            IdContract = 3,
-                            EndDate = new DateTime(2021, 11, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FinalAmount = "25000",
-                            IntrestPercentage = "5.0",
-                            IsActivated = false,
-                            NumberOfPayments = 1,
-                            PayersName = "JhonDee@ce.com",
-                            PenaltyPErcentage = "7.5",
-                            ReciversName = "JoseCapablanka@ce.com",
-                            StartDate = new DateTime(2021, 6, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            TermsOfPayments = "MonthleyPayments"
-                        },
-                        new
-                        {
-                            IdContract = 4,
-                            EndDate = new DateTime(2021, 6, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FinalAmount = "19000",
-                            IntrestPercentage = "5.0",
-                            IsActivated = false,
-                            NumberOfPayments = 1,
-                            PayersName = "JhonDee@ce.com",
-                            PenaltyPErcentage = "7.5",
-                            ReciversName = "FrodoBaggins@ce.comm",
-                            StartDate = new DateTime(2021, 6, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            TermsOfPayments = "Custom"
                         });
                 });
 
@@ -150,6 +110,16 @@ namespace Payments.Domain.Migrations
                     b.HasIndex("StatusId");
 
                     b.ToTable("FinalBill");
+
+                    b.HasData(
+                        new
+                        {
+                            IdFinalBill = 1,
+                            PayerId = 1,
+                            PaymnetSolutionId = 1,
+                            ReceiverId = 1,
+                            StatusId = 1
+                        });
                 });
 
             modelBuilder.Entity("Payments.Model.Entities.PayersTable", b =>
@@ -200,6 +170,14 @@ namespace Payments.Domain.Migrations
                     b.HasKey("IdPaymentInformation");
 
                     b.ToTable("PaymentInformations");
+
+                    b.HasData(
+                        new
+                        {
+                            IdPaymentInformation = 1,
+                            Amount = "1200.00",
+                            Description = "One payment for bill"
+                        });
                 });
 
             modelBuilder.Entity("Payments.Model.Entities.PaymentSchedule", b =>
@@ -234,6 +212,18 @@ namespace Payments.Domain.Migrations
                     b.HasIndex("PaymnetInformationId");
 
                     b.ToTable("PaymentSchedules");
+
+                    b.HasData(
+                        new
+                        {
+                            IdPaymentSchedule = 1,
+                            EntOfSchedule = new DateTime(2021, 6, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FinalAmount = "1200.00",
+                            IsPaid = false,
+                            PaymentSolutionId = 1,
+                            PaymnetInformationId = 1,
+                            StartOfSchedule = new DateTime(2021, 6, 25, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
                 });
 
             modelBuilder.Entity("Payments.Model.Entities.PaymentSolution", b =>
@@ -257,6 +247,15 @@ namespace Payments.Domain.Migrations
                     b.HasIndex("StatusId");
 
                     b.ToTable("PaymentSolutions");
+
+                    b.HasData(
+                        new
+                        {
+                            IdPaymentSolution = 1,
+                            NumberOfPayments = "1",
+                            StatusId = 1,
+                            TermsOfPaymnt = "OnePayment"
+                        });
                 });
 
             modelBuilder.Entity("Payments.Model.Entities.ReceiversTable", b =>

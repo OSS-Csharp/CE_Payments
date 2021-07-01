@@ -3,23 +3,30 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Payments.Domain.Migrations
 {
-    public partial class paymentstest : Migration
+    public partial class finalbill : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "JobsTable",
+                name: "Contracts",
                 columns: table => new
                 {
-                    JobsID = table.Column<int>(type: "int", nullable: false)
+                    IdContract = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    PayersName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ReciversName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TermsOfPayments = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NumberOfPayments = table.Column<int>(type: "int", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IntrestPercentage = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PenaltyPErcentage = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsActivated = table.Column<bool>(type: "bit", nullable: false),
+                    FinalAmount = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_JobsTable", x => x.JobsID);
+                    table.PrimaryKey("PK_Contracts", x => x.IdContract);
                 });
 
             migrationBuilder.CreateTable(
@@ -93,60 +100,6 @@ namespace Payments.Domain.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "JobsList",
-                columns: table => new
-                {
-                    JobListID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    JobsID = table.Column<int>(type: "int", nullable: false),
-                    PayerConformation = table.Column<bool>(type: "bit", nullable: false),
-                    ReciverConformation = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_JobsList", x => x.JobListID);
-                    table.ForeignKey(
-                        name: "FK_JobsList_JobsTable_JobsID",
-                        column: x => x.JobsID,
-                        principalTable: "JobsTable",
-                        principalColumn: "JobsID",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "FinalBill",
-                columns: table => new
-                {
-                    IdFinalBill = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    PayerId = table.Column<int>(type: "int", nullable: false),
-                    ReceiverId = table.Column<int>(type: "int", nullable: false),
-                    StatusId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_FinalBill", x => x.IdFinalBill);
-                    table.ForeignKey(
-                        name: "FK_FinalBill_PayersTable_PayerId",
-                        column: x => x.PayerId,
-                        principalTable: "PayersTable",
-                        principalColumn: "IdPayer",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_FinalBill_ReceiversTable_ReceiverId",
-                        column: x => x.ReceiverId,
-                        principalTable: "ReceiversTable",
-                        principalColumn: "IdReceiver",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_FinalBill_StatusFinalBill_StatusId",
-                        column: x => x.StatusId,
-                        principalTable: "StatusFinalBill",
-                        principalColumn: "IdStatus",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "PaymentSolutions",
                 columns: table => new
                 {
@@ -168,22 +121,42 @@ namespace Payments.Domain.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ConformationTable",
+                name: "FinalBill",
                 columns: table => new
                 {
-                    ConformationID = table.Column<int>(type: "int", nullable: false)
+                    IdFinalBill = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    JobListID = table.Column<int>(type: "int", nullable: false),
-                    PriceCheck = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    PayerId = table.Column<int>(type: "int", nullable: false),
+                    ReceiverId = table.Column<int>(type: "int", nullable: false),
+                    StatusId = table.Column<int>(type: "int", nullable: false),
+                    PaymnetSolutionId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ConformationTable", x => x.ConformationID);
+                    table.PrimaryKey("PK_FinalBill", x => x.IdFinalBill);
                     table.ForeignKey(
-                        name: "FK_ConformationTable_JobsList_JobListID",
-                        column: x => x.JobListID,
-                        principalTable: "JobsList",
-                        principalColumn: "JobListID",
+                        name: "FK_FinalBill_PayersTable_PayerId",
+                        column: x => x.PayerId,
+                        principalTable: "PayersTable",
+                        principalColumn: "IdPayer",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_FinalBill_PaymentSolutions_PaymnetSolutionId",
+                        column: x => x.PaymnetSolutionId,
+                        principalTable: "PaymentSolutions",
+                        principalColumn: "IdPaymentSolution",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_FinalBill_ReceiversTable_ReceiverId",
+                        column: x => x.ReceiverId,
+                        principalTable: "ReceiversTable",
+                        principalColumn: "IdReceiver",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_FinalBill_StatusFinalBill_StatusId",
+                        column: x => x.StatusId,
+                        principalTable: "StatusFinalBill",
+                        principalColumn: "IdStatus",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -217,61 +190,69 @@ namespace Payments.Domain.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "JobsTable",
-                columns: new[] { "JobsID", "Description", "Name", "Price" },
-                values: new object[,]
-                {
-                    { 1, "Writes code for apps", "Software Developer", 225m },
-                    { 2, "Supervises developers", "IT Manager", 550m }
-                });
+                table: "Contracts",
+                columns: new[] { "IdContract", "EndDate", "FinalAmount", "IntrestPercentage", "IsActivated", "NumberOfPayments", "PayersName", "PenaltyPErcentage", "ReciversName", "StartDate", "TermsOfPayments" },
+                values: new object[] { 1, new DateTime(2021, 6, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "5.0", false, 1, "JhonDee@ce.com", "7.5", "BobbyFischer@ce.com", new DateTime(2021, 6, 25, 0, 0, 0, 0, DateTimeKind.Unspecified), "OnePayment" });
 
             migrationBuilder.InsertData(
                 table: "PayersTable",
                 columns: new[] { "IdPayer", "Name" },
                 values: new object[,]
                 {
-                    { 1, "eaaav@gad" },
-                    { 2, "htthv@gad" }
+                    { 1, "JhonDee@ce.com" },
+                    { 2, "ElizabethHarmon@ce.com" },
+                    { 3, "ErickRosen@ce.com" }
                 });
+
+            migrationBuilder.InsertData(
+                table: "PaymentInformations",
+                columns: new[] { "IdPaymentInformation", "Amount", "Description" },
+                values: new object[] { 1, "1200.00", "One payment for bill" });
 
             migrationBuilder.InsertData(
                 table: "ReceiversTable",
                 columns: new[] { "IdReceiver", "Name" },
                 values: new object[,]
                 {
-                    { 1, "asdf@gad" },
-                    { 2, "zztzf@gad" }
+                    { 1, "BobbyFischer@ce.com" },
+                    { 2, "JoseCapablanka@ce.com" },
+                    { 3, "FrodoBaggins@ce.com" }
                 });
 
             migrationBuilder.InsertData(
                 table: "StatusFinalBill",
                 columns: new[] { "IdStatus", "Code", "Description", "ShortName" },
-                values: new object[] { 1, "1950", "This is some very dangerous string error", "Some Status" });
+                values: new object[] { 1, "C001", "This bill is currently active and waiting for completion", "Active" });
+
+            migrationBuilder.InsertData(
+                table: "StatusPaymentSolution",
+                columns: new[] { "Id", "Code", "Description", "ShortName" },
+                values: new object[] { 1, "P001", "Paymet schedule is active and pendint for paymnets", "Active" });
+
+            migrationBuilder.InsertData(
+                table: "PaymentSolutions",
+                columns: new[] { "IdPaymentSolution", "NumberOfPayments", "StatusId", "TermsOfPaymnt" },
+                values: new object[] { 1, "1", 1, "OnePayment" });
 
             migrationBuilder.InsertData(
                 table: "FinalBill",
-                columns: new[] { "IdFinalBill", "PayerId", "ReceiverId", "StatusId" },
-                values: new object[] { 1, 1, 1, 1 });
+                columns: new[] { "IdFinalBill", "PayerId", "PaymnetSolutionId", "ReceiverId", "StatusId" },
+                values: new object[] { 1, 1, 1, 1, 1 });
 
             migrationBuilder.InsertData(
-                table: "FinalBill",
-                columns: new[] { "IdFinalBill", "PayerId", "ReceiverId", "StatusId" },
-                values: new object[] { 2, 2, 2, 1 });
-
-            migrationBuilder.InsertData(
-                table: "JobsList",
-                columns: new[] { "JobListID", "JobsID", "PayerConformation", "ReciverConformation" },
-                values: new object[] { 1, 1, true, true });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ConformationTable_JobListID",
-                table: "ConformationTable",
-                column: "JobListID");
+                table: "PaymentSchedules",
+                columns: new[] { "IdPaymentSchedule", "EntOfSchedule", "FinalAmount", "PaymentSolutionId", "PaymnetInformationId", "StartOfSchedule" },
+                values: new object[] { 1, new DateTime(2021, 6, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), "1200.00", 1, 1, new DateTime(2021, 6, 25, 0, 0, 0, 0, DateTimeKind.Unspecified) });
 
             migrationBuilder.CreateIndex(
                 name: "IX_FinalBill_PayerId",
                 table: "FinalBill",
                 column: "PayerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FinalBill_PaymnetSolutionId",
+                table: "FinalBill",
+                column: "PaymnetSolutionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FinalBill_ReceiverId",
@@ -282,11 +263,6 @@ namespace Payments.Domain.Migrations
                 name: "IX_FinalBill_StatusId",
                 table: "FinalBill",
                 column: "StatusId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_JobsList_JobsID",
-                table: "JobsList",
-                column: "JobsID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PaymentSchedules_PaymentSolutionId",
@@ -307,16 +283,13 @@ namespace Payments.Domain.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ConformationTable");
+                name: "Contracts");
 
             migrationBuilder.DropTable(
                 name: "FinalBill");
 
             migrationBuilder.DropTable(
                 name: "PaymentSchedules");
-
-            migrationBuilder.DropTable(
-                name: "JobsList");
 
             migrationBuilder.DropTable(
                 name: "PayersTable");
@@ -332,9 +305,6 @@ namespace Payments.Domain.Migrations
 
             migrationBuilder.DropTable(
                 name: "PaymentSolutions");
-
-            migrationBuilder.DropTable(
-                name: "JobsTable");
 
             migrationBuilder.DropTable(
                 name: "StatusPaymentSolution");

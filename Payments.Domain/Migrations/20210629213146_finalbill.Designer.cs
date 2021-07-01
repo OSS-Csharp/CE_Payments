@@ -10,8 +10,8 @@ using Payments.Domain;
 namespace Payments.Domain.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20210626210313_paymentstest")]
-    partial class paymentstest
+    [Migration("20210629213146_finalbill")]
+    partial class finalbill
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,96 +21,64 @@ namespace Payments.Domain.Migrations
                 .HasAnnotation("ProductVersion", "5.0.6")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Payments.Model.Entities.ConformationTable", b =>
+            modelBuilder.Entity("Payments.Model.Entities.Contract", b =>
                 {
-                    b.Property<int>("ConformationID")
+                    b.Property<int>("IdContract")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("JobListID")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<decimal>("PriceCheck")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<string>("FinalAmount")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ConformationID");
+                    b.Property<string>("IntrestPercentage")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasIndex("JobListID");
-
-                    b.ToTable("ConformationTable");
-                });
-
-            modelBuilder.Entity("Payments.Model.Entities.JobsList", b =>
-                {
-                    b.Property<int>("JobListID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("JobsID")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("PayerConformation")
+                    b.Property<bool>("IsActivated")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("ReciverConformation")
-                        .HasColumnType("bit");
+                    b.Property<int>("NumberOfPayments")
+                        .HasColumnType("int");
 
-                    b.HasKey("JobListID");
+                    b.Property<string>("PayersName")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasIndex("JobsID");
+                    b.Property<string>("PenaltyPErcentage")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.ToTable("JobsList");
+                    b.Property<string>("ReciversName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TermsOfPayments")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("IdContract");
+
+                    b.ToTable("Contracts");
 
                     b.HasData(
                         new
                         {
-                            JobListID = 1,
-                            JobsID = 1,
-                            PayerConformation = true,
-                            ReciverConformation = true
+                            IdContract = 1,
+                            EndDate = new DateTime(2021, 6, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IntrestPercentage = "5.0",
+                            IsActivated = false,
+                            NumberOfPayments = 1,
+                            PayersName = "JhonDee@ce.com",
+                            PenaltyPErcentage = "7.5",
+                            ReciversName = "BobbyFischer@ce.com",
+                            StartDate = new DateTime(2021, 6, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            TermsOfPayments = "OnePayment"
                         });
                 });
 
-            modelBuilder.Entity("Payments.Model.Entities.JobsTable", b =>
-                {
-                    b.Property<int>("JobsID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("JobsID");
-
-                    b.ToTable("JobsTable");
-
-                    b.HasData(
-                        new
-                        {
-                            JobsID = 1,
-                            Description = "Writes code for apps",
-                            Name = "Software Developer",
-                            Price = 225m
-                        },
-                        new
-                        {
-                            JobsID = 2,
-                            Description = "Supervises developers",
-                            Name = "IT Manager",
-                            Price = 550m
-                        });
-                });
-
-            modelBuilder.Entity("Payments.Model.Entities.PAymentSchedule", b =>
+            modelBuilder.Entity("Payments.Model.Entities.FinalBill", b =>
                 {
                     b.Property<int>("IdFinalBill")
                         .ValueGeneratedOnAdd()
@@ -118,6 +86,9 @@ namespace Payments.Domain.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("PayerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PaymnetSolutionId")
                         .HasColumnType("int");
 
                     b.Property<int>("ReceiverId")
@@ -131,6 +102,8 @@ namespace Payments.Domain.Migrations
 
                     b.HasIndex("PayerId");
 
+                    b.HasIndex("PaymnetSolutionId");
+
                     b.HasIndex("ReceiverId");
 
                     b.HasIndex("StatusId");
@@ -142,14 +115,8 @@ namespace Payments.Domain.Migrations
                         {
                             IdFinalBill = 1,
                             PayerId = 1,
+                            PaymnetSolutionId = 1,
                             ReceiverId = 1,
-                            StatusId = 1
-                        },
-                        new
-                        {
-                            IdFinalBill = 2,
-                            PayerId = 2,
-                            ReceiverId = 2,
                             StatusId = 1
                         });
                 });
@@ -172,12 +139,17 @@ namespace Payments.Domain.Migrations
                         new
                         {
                             IdPayer = 1,
-                            Name = "eaaav@gad"
+                            Name = "JhonDee@ce.com"
                         },
                         new
                         {
                             IdPayer = 2,
-                            Name = "htthv@gad"
+                            Name = "ElizabethHarmon@ce.com"
+                        },
+                        new
+                        {
+                            IdPayer = 3,
+                            Name = "ErickRosen@ce.com"
                         });
                 });
 
@@ -197,6 +169,14 @@ namespace Payments.Domain.Migrations
                     b.HasKey("IdPaymentInformation");
 
                     b.ToTable("PaymentInformations");
+
+                    b.HasData(
+                        new
+                        {
+                            IdPaymentInformation = 1,
+                            Amount = "1200.00",
+                            Description = "One payment for bill"
+                        });
                 });
 
             modelBuilder.Entity("Payments.Model.Entities.PaymentSchedule", b =>
@@ -228,6 +208,17 @@ namespace Payments.Domain.Migrations
                     b.HasIndex("PaymnetInformationId");
 
                     b.ToTable("PaymentSchedules");
+
+                    b.HasData(
+                        new
+                        {
+                            IdPaymentSchedule = 1,
+                            EntOfSchedule = new DateTime(2021, 6, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FinalAmount = "1200.00",
+                            PaymentSolutionId = 1,
+                            PaymnetInformationId = 1,
+                            StartOfSchedule = new DateTime(2021, 6, 25, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
                 });
 
             modelBuilder.Entity("Payments.Model.Entities.PaymentSolution", b =>
@@ -251,6 +242,15 @@ namespace Payments.Domain.Migrations
                     b.HasIndex("StatusId");
 
                     b.ToTable("PaymentSolutions");
+
+                    b.HasData(
+                        new
+                        {
+                            IdPaymentSolution = 1,
+                            NumberOfPayments = "1",
+                            StatusId = 1,
+                            TermsOfPaymnt = "OnePayment"
+                        });
                 });
 
             modelBuilder.Entity("Payments.Model.Entities.ReceiversTable", b =>
@@ -271,12 +271,17 @@ namespace Payments.Domain.Migrations
                         new
                         {
                             IdReceiver = 1,
-                            Name = "asdf@gad"
+                            Name = "BobbyFischer@ce.com"
                         },
                         new
                         {
                             IdReceiver = 2,
-                            Name = "zztzf@gad"
+                            Name = "JoseCapablanka@ce.com"
+                        },
+                        new
+                        {
+                            IdReceiver = 3,
+                            Name = "FrodoBaggins@ce.com"
                         });
                 });
 
@@ -304,9 +309,9 @@ namespace Payments.Domain.Migrations
                         new
                         {
                             IdStatus = 1,
-                            Code = "1950",
-                            Description = "This is some very dangerous string error",
-                            ShortName = "Some Status"
+                            Code = "C001",
+                            Description = "This bill is currently active and waiting for completion",
+                            ShortName = "Active"
                         });
                 });
 
@@ -329,35 +334,28 @@ namespace Payments.Domain.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("StatusPaymentSolution");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Code = "P001",
+                            Description = "Paymet schedule is active and pendint for paymnets",
+                            ShortName = "Active"
+                        });
                 });
 
-            modelBuilder.Entity("Payments.Model.Entities.ConformationTable", b =>
-                {
-                    b.HasOne("Payments.Model.Entities.JobsList", "JobList")
-                        .WithMany()
-                        .HasForeignKey("JobListID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("JobList");
-                });
-
-            modelBuilder.Entity("Payments.Model.Entities.JobsList", b =>
-                {
-                    b.HasOne("Payments.Model.Entities.JobsTable", "Job")
-                        .WithMany()
-                        .HasForeignKey("JobsID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Job");
-                });
-
-            modelBuilder.Entity("Payments.Model.Entities.PAymentSchedule", b =>
+            modelBuilder.Entity("Payments.Model.Entities.FinalBill", b =>
                 {
                     b.HasOne("Payments.Model.Entities.PayersTable", "Payer")
                         .WithMany("FinalBill")
                         .HasForeignKey("PayerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Payments.Model.Entities.PaymentSolution", "PaymentSolution")
+                        .WithMany("FinalBill")
+                        .HasForeignKey("PaymnetSolutionId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -374,6 +372,8 @@ namespace Payments.Domain.Migrations
                         .IsRequired();
 
                     b.Navigation("Payer");
+
+                    b.Navigation("PaymentSolution");
 
                     b.Navigation("Receiver");
 
@@ -422,6 +422,8 @@ namespace Payments.Domain.Migrations
 
             modelBuilder.Entity("Payments.Model.Entities.PaymentSolution", b =>
                 {
+                    b.Navigation("FinalBill");
+
                     b.Navigation("PaymentSchedule");
                 });
 

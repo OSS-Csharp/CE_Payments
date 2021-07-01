@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 
 namespace Payments.Api.Controllers
 {
+    [Route("api/[controller]/[action]")]
+    [ApiController]
     public class PayersController : Controller
     {
 
@@ -18,10 +20,7 @@ namespace Payments.Api.Controllers
         {
             this._payerlRepository = payerlRepository;
         }
-        public IActionResult Index()
-        {
-            return View();
-        }
+       
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PayersTable>>> GetPayers()
         {
@@ -36,6 +35,7 @@ namespace Payments.Api.Controllers
             }
         }
         [HttpGet]
+        [Route("{id:int}")]
         public async Task<ActionResult<PayersTable>> GetPayer(int id)
         {
             try
@@ -49,16 +49,17 @@ namespace Payments.Api.Controllers
             }
         }
         [HttpPut]
-        public async Task<ActionResult<PayersTable>> UpdatePayer(int id, PayersTable payer)
+        [Route("{payermodel}")]
+        public async Task<ActionResult<PayersTable>> UpdatePayer(PayersTable payer)
         {
             try
             {
                 if (payer == null)
                     return BadRequest();
 
-                var userToUpdate = await _payerlRepository.GetPayer(id);
+                var userToUpdate = await _payerlRepository.GetPayer(payer.IdPayer);
                 if (userToUpdate == null)
-                    return NotFound($"No user with Id= {id}");
+                    return NotFound($"No user with Id= {payer.IdPayer}");
                 return await _payerlRepository.UpdatePayer(payer);
             }
             catch
@@ -68,6 +69,7 @@ namespace Payments.Api.Controllers
             }
         }
         [HttpPost]
+        [Route("{payermodel}")]
         public async Task<ActionResult<PayersTable>> AddUserModel(PayersTable payermodel)
         {
             try
@@ -81,11 +83,12 @@ namespace Payments.Api.Controllers
             catch
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                "Error creating new employee record");
+                "Error creating new user record");
             }
 
         }
         [HttpDelete]
+        [Route("{id:int}")]
         public async Task<ActionResult<PayersTable>> DeleteUserModel(int id)
         {
             try
@@ -102,9 +105,24 @@ namespace Payments.Api.Controllers
             catch
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                "Error creating new employee record");
+                "Error deleting record");
             }
 
+        }
+
+        [HttpGet]
+        [Route("{name}")]
+        public async Task<ActionResult<PayersTable>> GetPayerByName(string name)
+        {
+            try
+            {
+                return (await _payerlRepository.GetPayerByName(name));
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "Error retrieving data from the database");
+            }
         }
     }
 }

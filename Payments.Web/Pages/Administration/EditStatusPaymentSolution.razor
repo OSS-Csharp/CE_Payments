@@ -1,10 +1,10 @@
-﻿@page "/editstatusfinalbill/{id}"
+﻿@page "/editstatuspaymentsolution/{id}"
 
-@page "/editstatusfinalbill"
+@page "/editstatuspaymentsolution"
 
-@inherits EditStatusFinalBillBase
+@inherits EditStatusPaymentSolutionBase
+
 @attribute [Authorize(Roles = "admin")]
-
 <h3>StatusFinalBill</h3>
 
 @if (warning)

@@ -1,34 +1,15 @@
 ﻿@page "/FinalBill"
 @inherits FinalBillPageBase
-
+@attribute [Authorize(Roles = "admin")]
 <div class="card-deck">
-
-    ITS ALL ABOUT TEST TEST TSET
 
     <AuthorizeView Roles="admin">
         <Authorized>
-            @if (bill != null)
-            {
-
-
-                <div class="card-header">
-                    <h3>Info </h3>
-                    <h4>id: @bill.IdFinalBill </h4>
-                    <h4>Payers name: @bill.Payer.Name</h4>
-                    <h4>Recivers name: @bill.Receiver.Name </h4>
-                </div>
-            }
-            else
-            {
-                <h1>one user</h1>
-                
-                }
-
 
             @if (FinalBills == null)
             {
 
-
+                
                 <div class="spinner"></div>
             }
             else
@@ -41,13 +22,14 @@
 
                         <h4>Payers name: @billill.Payer.Name</h4>
                         <h4>Recivers name: @billill.Receiver.Name </h4>
+                        <label>status: @billill.Status.ShortName</label>
                     </div>
 
                 }
             }
         </Authorized>
         <NotAuthorized>
-            not authorized
+            you are not authorized fore this page
         </NotAuthorized>
     </AuthorizeView>
 </div>

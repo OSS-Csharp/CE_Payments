@@ -11,5 +11,8 @@ namespace Payments.Web.Services.Interfaces
     {
         Task<IEnumerable<Contract>> GetContracts();
         Task<Contract> GetContract(int Id);
+        Task<IEnumerable<Contract>> GetContractsByPayer(string name);
+
+        Task<Contract> UpdateContractActivation(Contract contract);
     }
 }

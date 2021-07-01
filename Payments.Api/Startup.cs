@@ -43,11 +43,20 @@ namespace Payments.Api
             services.AddRazorPages();
             services.AddScoped<IReceiversRepository, ReceiversRepository>();
             services.AddScoped<IPayersRepository, PayersRepository>();
+
             services.AddScoped<IFinallBillRepository, FinalBillRepository>();
+
             services.AddScoped<IStatusFinalBillRepository, StatusFinalBillRepository>();
             services.AddScoped<IStatusPaymentSolutionRepository, StatusPaymentSolutionRepository>();
-            services.AddScoped<IJobsRepository, JobsRepository>();
+
+          
+
             services.AddScoped<IContractRepository, ContractRepository>();
+
+            services.AddScoped<IPaymentInformationRepository, PaymentInformationRepository>();
+            services.AddScoped<IPaymentScheduleRepository, PaymentScheduleRepository>();
+            services.AddScoped<IPaymentSolutionRepository, PaymentSolutionRepository>();
+
 
         }
 

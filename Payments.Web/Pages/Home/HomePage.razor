@@ -1,34 +1,59 @@
 ﻿@page "/homepage"
+@page "/"
 @inherits HomePageBase
 
-<h5>testatesttest</h5>
-@if (Contracts != null)
-{
-    foreach (var cnt in Contracts)
+<h5>Contracts including one that have not been activated: </h5>
+<div class="card-deck">
+    @if (Contracts != null)
     {
-<div class="card">
-    <div>
-        @cnt.IdContract
-    </div>
-    <div>
-        @cnt.PayersName
-    </div>
-    <div>
-        @cnt.ReciversName
-    </div>
-    <div>
-        @cnt.StartDate
-    </div>
-    <div>
-        @cnt.EndDate
-    </div>
-    <div>
-        @cnt.IsActivated
-    </div>
-</div>
+
+        foreach (var cnt in Contracts)
+        {
+            <div class="card ">
+                <div class="row card-header">
+
+                    <label> Payer: @cnt.PayersName  </label>
+                    <label> Receiver: @cnt.ReciversName </label>
+                    <label> Terms of Payments: @cnt.TermsOfPayments  Amount: @cnt.FinalAmount</label>
+                </div>
+                <div class="card-body ">
+                    <div class="">
+
+                        <label> Start date: @cnt.StartDate </label>
+                        <label> End date: @cnt.EndDate  activated: @cnt.IsActivated</label>
+                    </div>
+
+
+                    <div class="col-1" style="margin:auto">
+                        @if (cnt.IsActivated == false)
+                        {
+                            <button class="btn btn-danger" type="button" @onclick="(()=>ActivateContract(cnt.IdContract))">
+                                Activate this contract
+                            </button>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+
     }
+</div>
+
+@if (FinalBills != null)
+{
+    <h5>Active Bills:</h5>
+    foreach (var fbill in FinalBills)
+    {
+        <div class="card">
+            <NavLink class="nav-link card" href="@($"/payersbill/{fbill.PaymnetSolutionId}")" Match="NavLinkMatch.All">
+                <span class="oi" aria-hidden="true"></span> View Shecueld payments
+                <label>
+                    Contract opend with: @fbill.Payer.Name and curent status is : @fbill.Status.ShortName
+
+                </label>
+            </NavLink>
+
+        </div>
+    }
+
 }
-
-
-
-<h5>unoduetest</h5>

@@ -1,0 +1,24 @@
+﻿@page "/payersbill/{id}"
+@inherits PayersBillPageBase
+
+<h3>PayersBillPage</h3>
+
+
+@if (PaymentSchedules != null)
+{
+    foreach (var p in PaymentSchedules)
+    {
+        <div class="card col-5">
+            <label>Star of contract: @p.StartOfSchedule </label>
+            <label>End of contract: @p.EntOfSchedule</label>
+            <label>Amount: @p.FinalAmount</label>
+            @if (p.IsPaid == false)
+            {
+
+                <button class="btn btn-danger" type="button" @onclick="(()=>PaySchedule(p.IdPaymentSchedule))">
+                    Pay
+                </button>
+            }
+        </div>
+    }
+}

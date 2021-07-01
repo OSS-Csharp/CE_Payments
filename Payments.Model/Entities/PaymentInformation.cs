@@ -15,6 +15,8 @@ namespace Payments.Model.Entities
 
         public string Description { get; set;  }
 
+        //public int ContractOrigin { get; set; }
+
         [InverseProperty("PaymentInformation")]
         [System.Text.Json.Serialization.JsonIgnore]
         public virtual ICollection<PaymentSchedule> PaymentSchedule { get; set; }

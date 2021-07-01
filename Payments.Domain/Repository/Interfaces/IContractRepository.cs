@@ -10,5 +10,9 @@ namespace Payments.Domain.Repository.Interfaces
     {
         Task<IEnumerable<Contract>> GetContracts();
         Task<Contract> GetContract(int Id);
+
+        Task<IEnumerable<Contract>> GetContractsByPayer(string name);
+
+        Task<Contract> UpdateContractActivation(Contract contract);
     }
 }

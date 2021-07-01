@@ -13,5 +13,10 @@ namespace Payments.Domain.Repository.Interfaces
         Task<PaymentSchedule> AddPaymentSchedule(PaymentSchedule scheduleModel);
         Task<PaymentSchedule> UpdatePaymentSchedule(PaymentSchedule scheduleModel);
         Task<PaymentSchedule> DeletePaymentSchedule(int Id);
+
+        Task<IEnumerable<PaymentSchedule>> GetPaymentSchedulesBySolutionId(int id);
+
+        Task<PaymentSchedule> IsPaid(int Id);
+
     }
 }

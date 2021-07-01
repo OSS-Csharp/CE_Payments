@@ -27,6 +27,9 @@ namespace Payments.Model.Entities
         [System.Text.Json.Serialization.JsonIgnore]
         public virtual ICollection<PaymentSchedule> PaymentSchedule { get; set; }
 
+        [InverseProperty("PaymentSolution")]
+        [System.Text.Json.Serialization.JsonIgnore]
+        public virtual ICollection<FinalBill> FinalBill { get; set; }
 
     }
 }

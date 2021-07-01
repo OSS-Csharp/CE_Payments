@@ -18,22 +18,28 @@ namespace Payments.Web.Services
         {
             this.httpClient = httpClient;
         }
-
-        public async Task<StatusPaymentSolution> AddStatus(StatusPaymentSolution status)
-        {
-            return await httpClient.PostJsonAsync<StatusPaymentSolution>($"api/StatusPaymentSolution/AddStatus/{status}",status);
-        }
-
-        //public async Task<HttpResponseMessage> DeleteStatus(int id)
-        //{
-        //    return await httpClient.DeleteAsync($"api/StatusPaymentSolution/AddStatus/{id}");
-        //}
-
         public async Task<IEnumerable<StatusPaymentSolution>> GetStatuses()
         {
             return await httpClient.GetJsonAsync<StatusPaymentSolution[]>($"/api/StatusPaymentSolution/GetStatuses");
         }
+        public async Task<StatusPaymentSolution> AddStatus(StatusPaymentSolution status)
+        {
+            return await httpClient.PostJsonAsync<StatusPaymentSolution>($"api/StatusPaymentSolution/AddStatus/{status}", status);
+        }
 
-        
+        public async Task DeleteStatus(int id)
+        {
+            await httpClient.DeleteAsync($"api/StatusPaymentSolution/AddStatus/{id}");
+        }
+        public async Task<StatusPaymentSolution> UpdateStatus(StatusPaymentSolution status)
+        {
+            return await httpClient.PostJsonAsync<StatusPaymentSolution>($"api/StatusPaymentSolution/UpdateStatus/{status}", status);
+        }
+
+        public async Task<StatusPaymentSolution> GetStatus(int id)
+        {
+            return await httpClient.GetJsonAsync<StatusPaymentSolution>($"/api/StatusPaymentSolution/GetStatus/{id}");
+
+        }
     }
 }

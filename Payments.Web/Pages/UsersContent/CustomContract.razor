@@ -1,0 +1,31 @@
+﻿@page "/custompayments/{id}"
+@inherits CustomContractBase
+<h3>Custom Payments</h3>
+<p>Set the amount of each payment, </p>
+<EditForm Model="CustomPaymentsModel" OnSubmit="OnSubmitPayments">
+    <div class="card col-3" style="margin: auto">
+        <InputText id="shortname" class="form-control" placeholder="Amount" @bind-Value="CustomPaymentsModel.FinalAmount" />
+    </div>
+
+    <div class="col-1" style="margin:auto">
+        <button type="submit">Submit</button>
+    </div>
+</EditForm>
+<p>Amount that should be schedueld remains: @RestAmount</p>
+@if (CustomPaymentsModelsList != null)
+{
+    <h5>Added amounts per payment</h5>
+    foreach (var pmlist in CustomPaymentsModelsList)
+    {
+        <div class="row col-3">
+            @pmlist.FinalAmount
+        </div>
+        
+    }
+}
+@if (RestAmount == 0.0)
+{
+    <button @onclick="OnClick">
+        Submit Changes
+    </button>
+}

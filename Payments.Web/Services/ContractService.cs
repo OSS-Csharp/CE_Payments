@@ -20,11 +20,23 @@ namespace Payments.Web.Services
 
         public async Task<IEnumerable<Contract>> GetContracts()
         {
-            return await httpClient.GetJsonAsync<Contract[]>("api/Contracts/GetContracts");
+                return await httpClient.GetJsonAsync<Contract[]>("api/Contracts/GetContracts");
         }
         public async Task<Contract> GetContract(int id)
         {
             return await httpClient.GetJsonAsync<Contract>($"api/Contracts/GetContract/{id}");
+
+
+        }
+       
+        public async Task<IEnumerable<Contract>> GetContractsByPayer(string name)
+        {
+            return await httpClient.GetJsonAsync<Contract[]>($"/api/Contracts/GetContractsByPayer/{name}");
+        }
+
+        public async Task<Contract> UpdateContractActivation(Contract contract)
+        {
+            return await httpClient.PostJsonAsync<Contract>($"/api/Contracts/UpdateContractActivation/{contract}",contract);
         }
     }
 }

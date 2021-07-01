@@ -28,6 +28,7 @@ namespace Payments.Model.Entities
 
         public string FinalAmount { get; set; }
 
+        public bool IsPaid { get; set; }
 
     }
 

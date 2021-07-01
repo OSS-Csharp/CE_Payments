@@ -51,6 +51,36 @@ namespace Payments.Api.Controllers
                     "Error retrieving data from the database");
             }
         }
-        
+        [HttpGet]
+        [Route("{name}")]
+        public async Task<ActionResult<IEnumerable<Contract>>> GetContractsByPayer(string name)
+        {
+            try
+            {
+                var v = (await _contractRepository.GetContractsByPayer(name)).ToList();
+                return v;
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "Error retrieving data from the database");
+            }
+        }
+        [HttpPost]
+        [Route("{contract}")]
+        public async Task<ActionResult<Contract>> UpdateContractActivation(Contract contract)
+        {
+
+            try
+            {
+                return (await _contractRepository.UpdateContractActivation(contract));
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "Error retrieving data from the database");
+            }
+
+        }
     }
 }

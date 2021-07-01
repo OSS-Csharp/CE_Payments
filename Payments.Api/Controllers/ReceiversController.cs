@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 
 namespace Payments.Api.Controllers
 {
+    [Route("api/[controller]/[action]")]
+    [ApiController]
     public class ReceiversController : Controller
     {
 
@@ -18,10 +20,8 @@ namespace Payments.Api.Controllers
         {
             this._receiverlRepository = receiverlRepository;
         }
-        public IActionResult Index()
-        {
-            return View();
-        }
+       
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ReceiversTable>>> GetReceivers()
         {
@@ -36,6 +36,7 @@ namespace Payments.Api.Controllers
             }
         }
         [HttpGet]
+        [Route("{id:int}")]
         public async Task<ActionResult<ReceiversTable>> GetReceiver(int id)
         {
             try
@@ -49,16 +50,17 @@ namespace Payments.Api.Controllers
             }
         }
         [HttpPut]
-        public async Task<ActionResult<ReceiversTable>> UpdateReceiver(int id, ReceiversTable receiver)
+        [Route("{receivermodel}")]
+        public async Task<ActionResult<ReceiversTable>> UpdateReceiver(ReceiversTable receiver)
         {
             try
             {
                 if (receiver == null)
                     return BadRequest();
 
-                var userToUpdate = await _receiverlRepository.GetReceiver(id);
+                var userToUpdate = await _receiverlRepository.GetReceiver(receiver.IdReceiver);
                 if (userToUpdate == null)
-                    return NotFound($"No user with Id= {id}");
+                    return NotFound($"No user with Id= {receiver.IdReceiver}");
                 return await _receiverlRepository.UpdateReceiver(receiver);
             }
             catch
@@ -68,6 +70,7 @@ namespace Payments.Api.Controllers
             }
         }
         [HttpPost]
+        [Route("{receivermodel}")]
         public async Task<ActionResult<ReceiversTable>> AddUserModel(ReceiversTable receivermodel)
         {
             try
@@ -81,11 +84,12 @@ namespace Payments.Api.Controllers
             catch
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                "Error creating new employee record");
+                "Error creating new user");
             }
 
         }
         [HttpDelete]
+        [Route("{id:int}")]
         public async Task<ActionResult<ReceiversTable>> DeleteUserModel(int id)
         {
             try
@@ -102,7 +106,21 @@ namespace Payments.Api.Controllers
             catch
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                "Error creating new employee record");
+                "Error deleting user");
+            }
+        }
+        [HttpGet]
+        [Route("{name}")]
+        public async Task<ActionResult<ReceiversTable>> GetPayerByName(string name)
+        {
+            try
+            {
+                return (await _receiverlRepository.GetReceiverByName(name));
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "Error retrieving data from the database");
             }
         }
     }

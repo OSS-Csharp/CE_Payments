@@ -34,6 +34,7 @@ namespace Payments.Domain.Repository
 
         public async Task<FinalBill> AddFinalBill(FinalBill FinalBill)
         {
+            //FinalBill.IdFinalBill = null;
             var result = await appDbContext.FinalBills.AddAsync(FinalBill);
             await appDbContext.SaveChangesAsync();
             return result.Entity;
@@ -44,7 +45,7 @@ namespace Payments.Domain.Repository
             var result = await appDbContext.FinalBills.FirstOrDefaultAsync(e => e.IdFinalBill == FinalBill.IdFinalBill);
             if (result != null)
             {
-                
+                result.StatusId = FinalBill.StatusId;
                 await appDbContext.SaveChangesAsync();
                 return result;
             }
@@ -60,6 +61,21 @@ namespace Payments.Domain.Repository
                 return result;
             }
             return null;
+        }
+
+        public async Task<IEnumerable<FinalBill>> GetAllByPayer(int payerId)
+        {
+            return await appDbContext.FinalBills.Include(e => e.Payer).Include(e => e.Receiver).Include(e => e.Status).Where(p=>p.PayerId ==payerId).ToListAsync();
+        }
+
+        public async Task<IEnumerable<FinalBill>> GetAllByReceiver(int receiverId)
+        {
+            return await appDbContext.FinalBills.Include(e => e.Payer).Include(e => e.Receiver).Include(e => e.Status).Where(p => p.ReceiverId == receiverId).ToListAsync();
+        }
+
+        public async Task<FinalBill> GetFinalBillByPaymentSolution(int id)
+        {
+            return await appDbContext.FinalBills.FirstOrDefaultAsync(e => e.PaymnetSolutionId == id);
         }
     }
 }

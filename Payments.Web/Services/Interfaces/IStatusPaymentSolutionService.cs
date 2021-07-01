@@ -12,6 +12,9 @@ namespace Payments.Web.Services.Interfaces
         Task<IEnumerable<StatusPaymentSolution>> GetStatuses();
 
         Task<StatusPaymentSolution> AddStatus(StatusPaymentSolution status);
-        //Task<StatusPaymentSolution> DeleteStatus(int id);
+        Task DeleteStatus(int id);
+        Task<StatusPaymentSolution> GetStatus(int id);
+        Task<StatusPaymentSolution> UpdateStatus(StatusPaymentSolution status);
+
     }
 }

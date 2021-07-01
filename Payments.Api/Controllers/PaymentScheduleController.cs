@@ -67,7 +67,7 @@ namespace Payments.Api.Controllers
             catch
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                "Error updating user");
+                "Error updating schedule");
             }
         }
         [HttpPost]
@@ -79,13 +79,15 @@ namespace Payments.Api.Controllers
                 if (status == null)
                     return BadRequest();
 
+                
+
                 var createUser = await _PaymentScheduleRepository.AddPaymentSchedule(status);
                 return CreatedAtAction(nameof(GetPaymentSchedule), new { id = createUser.IdPaymentSchedule }, createUser);
             }
             catch
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                "Error creating new employee record");
+                "Error addimg schedule record");
             }
 
         }
@@ -106,8 +108,38 @@ namespace Payments.Api.Controllers
             catch
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                 "Error creating new employee record");
+                 "Error deleteing schedule record");
             }
         }
+       
+        [HttpGet]
+        [Route("{id:int}")]
+        public async Task<ActionResult<IEnumerable<PaymentSchedule>>> GetPaymentSchedulesBySolutionId(int id)
+        {
+            try
+            {
+                return (await _PaymentScheduleRepository.GetPaymentSchedulesBySolutionId(id)).ToList();
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "Error retrieving data from the database");
+            }
+        }
+        [HttpPost]
+        [Route("{id}")]
+        public async Task<ActionResult<PaymentSchedule>> IsPaid(int id)
+        {
+            try
+            {
+                return await _PaymentScheduleRepository.IsPaid(id);
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                "Error retrieving data from the database");
+            }
+        }
+
     }
 }

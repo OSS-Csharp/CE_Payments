@@ -51,43 +51,43 @@ namespace Payments.Api.Controllers
                     "Error retrieving data from the database");
             }
         }
-        [HttpPut]
-        [Route("{id:int}")]
-        public async Task<ActionResult<FinalBill>> UpdateFinalBill(int id, FinalBill finalBill)
+        [HttpPost]
+        [Route("{finalBill}")]
+        public async Task<ActionResult<FinalBill>> UpdateFinalBill( FinalBill finalBill)
         {
             try
             {
                 if (finalBill == null)
                     return BadRequest();
 
-                var userToUpdate = await _finalBillRepository.GetFinalBill(id);
+                var userToUpdate = await _finalBillRepository.GetFinalBill(finalBill.IdFinalBill);
                 if (userToUpdate == null)
-                    return NotFound($"No bill with Id= {id}");
+                    return NotFound($"No bill with Id= {finalBill.IdFinalBill}");
                 return await _finalBillRepository.UpdateFinalBill(finalBill);
             }
             catch
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                "Error updating user");
+                "Error updating final bill");
             }
 
         }
         [HttpPost]
-        [Route("{id:int}")]
-        public async Task<ActionResult<FinalBill>> AddFinalBill(FinalBill payermodel)
+        [Route("{bill}")]
+        public async Task<ActionResult<FinalBill>> AddFinalBill(FinalBill bill)
         {
             try
             {
-                if (payermodel == null)
+                if (bill == null)
                     return BadRequest();
 
-                var createUser = await _finalBillRepository.AddFinalBill(payermodel);
+                var createUser = await _finalBillRepository.AddFinalBill(bill);
                 return CreatedAtAction(nameof(GetFinalBill), new { id = createUser.IdFinalBill }, createUser);
             }
             catch
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                "Error creating new employee record");
+                "Error creating new final bill record");
             }
 
         }
@@ -109,9 +109,53 @@ namespace Payments.Api.Controllers
             catch
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                "Error creating new employee record");
+                "Error creating new final bill record");
             }
 
+        }
+        [HttpGet]
+        [Route("{id:int}")]
+        public async Task<ActionResult<IEnumerable<FinalBill>>> GetAllByPayer(int id)
+        {
+            try
+            {
+                
+                return (await _finalBillRepository.GetAllByPayer(id)).ToList();
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                "Error retrieving data from the database");
+            }
+        }
+        [HttpGet]
+        [Route("{id:int}")]
+        public async Task<ActionResult<IEnumerable<FinalBill>>> GetAllByReceiver(int receiverId)
+        {
+            try
+            {
+                return (await _finalBillRepository.GetAllByPayer(receiverId)).ToList();
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                "Error retrieving data from the database");
+            }
+        }
+        
+        [HttpGet]
+        [Route("{id:int}")]
+        public async Task<ActionResult<FinalBill>> GetFinalBillByPaymentSolution(int id)
+        {
+            try
+            {
+                return (await _finalBillRepository.GetFinalBillByPaymentSolution(id));
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                "Error retrieving data from the database");
+            }
         }
     }
 }
